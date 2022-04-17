@@ -1,6 +1,10 @@
 import { async } from '@firebase/util';
 import { useState, useEffect } from 'react';
-import { projectStorage } from '../fairbase/config';
+import {
+  projectStorage,
+  projectFairStorage,
+  timestamp,
+} from '../fairbase/config';
 
 const useStorage = (file) => {
   const [progress, setProgress] = useState(0);
@@ -9,6 +13,7 @@ const useStorage = (file) => {
 
   useEffect(() => {
     const storageRef = projectStorage.ref(file.name);
+    const collectionRef = projectFairStorage.collection('image');
 
     storageRef.put(file).on('sate_changed', (snap) => {
       let percentage = (snap.bytesTransfer / snap.totalBytes) * 100;
@@ -19,7 +24,8 @@ const useStorage = (file) => {
       },
       async () => {
         const url = await storageRef.getDownloadURL();
-        setUrl(url);
+        const createdAt = timestamp();
+        collectionRef.add({ url, createdAt });
       };
   }, [file]);
 
