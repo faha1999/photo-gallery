@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { projectFairStorage } from '../fairbase/config';
+import { projectFireStorage } from '../fairbase/config';
 
 const useFirestore = (collection) => {
   const [docs, setDocs] = useState([]);
 
   useEffect(() => {
-    const unsub = projectFairStorage
+    const unsub = projectFireStorage
       .collection(collection)
       .orderBy('createdAt', 'desc')
       .onSnapshot((snap) => {
@@ -17,6 +17,8 @@ const useFirestore = (collection) => {
       });
 
     return () => unsub();
+    // this is a cleanup function that react will run when
+    // a component using the hook unmounts
   }, [collection]);
 
   return { docs };

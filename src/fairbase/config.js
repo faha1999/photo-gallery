@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, serverTimestamp } from 'firebase/firestore';
 
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -17,8 +17,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-const projectStorage = getStorage.storage();
-const projectFairStorage = getFirestore.firestore();
-const timestamp = firebase.firestore.FieldValue.serverTimestamp;
+const projectStorage = getStorage(app);
+const projectFireStorage = getFirestore(app);
+const timestamp = serverTimestamp(app);
 
-export { projectStorage, projectFairStorage, timestamp };
+export { projectStorage, projectFireStorage, timestamp };
